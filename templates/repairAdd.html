@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="../style/glavna.css">
+    <meta charset="UTF-8">
+    <title>Add Repair</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div class="header-top" style="border-bottom: 2px solid #0b3e91">
+    <div id="yes" hidden class="logged" style="padding: 5px">
+        <div class="holder" style="width: 860px; margin: 0 auto;">
+            <div class="logo">
+                <b><p style="font-size: 25px; color: #fff;float: left; margin: auto">SERVISNA KNJIGA</p></b>
+            </div>
+            <div style="float: right"><p id="ime1" style="display: inline-block">Welcome </p>
+                <button id="logout" class="bttn2">Log Out!</button>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div style="clear: both">
+    </div>
+    <div id="vrh" class="header-bottom">
+        <div class="wrapper">
+
+            <!--<hr style="border-bottom: 2px solid #0b3e91;">-->
+            <!--<div id="logo"><b><p style="font-size: 25px; color: #0b3e91">SERVISNA KNJIGA</p></b></div>-->
+            <div id="nav" style="margin: 0 auto">
+                <ul>
+                    <li><a href="index.html">Pocetna</a></li>
+                    <li><a href="profile.html" id="profil">Moj Profil</a></li>
+                    <li><a href="kako-funkcionise.html">Kako funkcionise?</a></li>
+                    <li><a href="services.html">Autoservisi</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style=" background: url(../Images/parallax-transparent.jpg)">
+
+
+    <div class="car">
+
+        <table class="repair">
+            <tr>
+                <td>Unesite popravku: </td>
+                <td><input type="text" name="repair" id="repair"></td>
+            </tr>
+            <tr>
+                <td>Unesite datum: </td>
+                <td><input type="date" name="date" id="date"></td>
+            </tr>
+            <tr>
+                <td>Unesite kilometrazu: </td>
+                <td><input type="text" name="distance" id="distance"></td>
+            </tr>
+            <tr>
+                <td>Unesite cijenu: </td>
+                <td><input type="text" name="price" id="price"></td>
+            </tr>
+            <tr>
+                <td>Odaberite servis: </td>
+                <td><select name="car_service" id="car_service"></select></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center"><button id="save" class="bttn2">Sacuvaj!</button></td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+<hr style="border-bottom: 2px solid #0b3e91; margin-top: 0">
+
+
+<div id="footer">
+
+    <p class="rights">All rigths reserved &copy; 2019 Marko</p>
+
+</div>
+
+
+</body>
+
+<script>
+
+
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    id = parts[parts.length-2];
+    idParts = id.split("&");
+    carId = idParts[idParts.length-2];
+    serviceBookId = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/showServices.php',
+            data: {},
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function() {
+                    $("#car_service").append('<option value="' + this.id + '">' + this.name + '</option>')
+                })
+            },
+        });
+    });
+
+    var ime;
+    var id;
+    $( "#save" ).click(function() {
+        var repair = $("#repair").val();
+        var date = $("#date").val();
+        var distance = $("#distance").val();
+        var price = $("#price").val();
+        var car_service = $("#car_service").val();
+        var service_book = serviceBookId;
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/repairAdd.php',
+            data: {repair: repair, date: date, distance: distance, price: price,
+                car_service: car_service, service_book: service_book},
+            dataType: 'json',
+            success: function(data) {
+                if (data.status) {
+                    alert("Uspjesno ste unijeli popravku!!!");
+                    window.location.href = "service_book.html?car_id=" + carId + "&service_book_id=" + serviceBookId;
+                }
+                else {
+                    alert(data.status)
+                }
+            },
+        });
+    });
+
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: {  },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    // $("#first").append('<div style="width: 860px; margin: 0 auto; padding-top: 15px">' +
+                    //     '<div style="float: right">Welcome ' + data.name + ' <button id="logout">Log Out!</button>' +
+                    //     '</div><div style="clear: both"></div></div>' +
+                    //     '<hr style="border-bottom: 2px solid #0b3e91;">');
+                    // window.history.pushState(null, null, "?id=" + data.id);
+                    $("#yes").show();
+                    $("#ime1").append(data.name);
+
+                    window.history.pushState(null, null, "?id=" + data.id);
+
+                }
+            },
+        });
+    });
+
+    $("#logout").click( function (){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/logout.php',
+            data: { },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = "index.html";
+                }
+                else
+                {
+                    alert('GRESKA');
+                }
+            },
+        });
+    });
+
+</script>
+
+</html>

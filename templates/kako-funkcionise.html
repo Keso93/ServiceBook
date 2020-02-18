@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kako Funkcionise</title>
+    <link rel="stylesheet" type="text/css" href="../style/glavna.css">
+    <!--<link rel="stylesheet" href="../css/animate.css">-->
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+
+
+<div class="header-top" style="border-bottom: 2px solid #0b3e91">
+    <div id="yes" hidden class="logged" style="padding: 5px">
+        <div class="holder">
+            <div class="logo">
+                <b><p class="knjiga">SERVISNA KNJIGA</p></b>
+            </div>
+            <div style="float: right"><p id="ime1" style="display: inline-block">Welcome </p>
+                <button id="logout" class="bttn2">Log Out!</button>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div style="clear: both">
+    </div>
+    <div id="vrh" class="header-bottom">
+        <div class="wrapper">
+
+            <!--<hr style="border-bottom: 2px solid #0b3e91;">-->
+            <!--<div id="logo"><b><p style="font-size: 25px; color: #0b3e91">SERVISNA KNJIGA</p></b></div>-->
+            <div id="nav" style="margin: 0 auto">
+                <ul>
+                    <li><a href="index.html">Pocetna</a></li>
+                    <li><a href="profile.html" id="profil">Moj Profil</a></li>
+                    <li><a href="kako-funkcionise.html">Kako funkcionise?</a></li>
+                    <li><a href="services.html">Autoservisi</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="holder">
+    <div style="margin-top: 25px">
+        <div class="cimg">
+            <img src="../Images/car.png" alt="auto" style="float: left; padding-right: 30px" class="slide-right">
+            <div style="clear:both;"></div>
+        </div>
+        <h2>Šta je sadržaj i ko može da čita iz e-knjižice?</h2>
+        <p class="rights" style="text-align: left">U knjižicu se upisuju tehnički podaci vozila (broj šasije i motora, kubikaža, snaga, vrsta goriva, podaci o gumama,
+            klimi itd), svi urađeni servisi i opravke, kao i ugrađeni delovi. E-knjižici može da pristupa samo vlasnik, tj.
+            onaj ko poseduje saobraćajnu dozvolu, kao i oni kojima vlasnik to dozvoli davanjem saobraćajne dozvole
+            (auto servisu prilikom održavanja vozila).</p>
+        <div style="clear: both"></div>
+    </div>
+
+    <hr style="border-bottom: 2px solid #0b3e91; margin-top: 5px">
+
+    <div class="divide">
+        <img src="../Images/write.png" alt="auto" style="float: right; padding-left: 40px" class="slide-left">
+        <h2>Ko može da upisuje u e-knjižicu?</h2>
+        <p class="rights" style="text-align: left">Podatke koji se učitavaju sa saobraćajne dozvole upisuju autorizovani auto servisi.
+            Dodatne podatke o vozilu, kao i podatke o servisiranju vozila upisuju auto servisi,
+            kojima pristup e-knjižici daje vlasnik predajom saobraćajne dozvole.).</p>
+    </div>
+    <div style="clear: both"></div>
+
+</div>
+
+<hr style="border-bottom: 2px solid #0b3e91; margin-top: 5px">
+
+<div id="footer">
+
+    <p class="rights">All rigths reserved &copy; 2019 Marko</p>
+
+</div>
+
+</body>
+
+<script>
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    // $("#first").append('<div style="width: 860px; margin: 0 auto; padding-top: 15px">' +
+                    //     '<div style="float: right">Welcome ' + data.name + ' <button id="logout">Log Out!</button>' +
+                    //     '</div><div style="clear: both"></div></div>' +
+                    //     '<hr style="border-bottom: 2px solid #0b3e91;">');
+                    // window.history.pushState(null, null, "?id=" + data.id);
+                    $("#yes").show();
+                    $("#ime1").append(data.name);
+
+                    window.history.pushState(null, null, "?id=" + data.id);
+
+                }
+            },
+        });
+    });
+
+    $("#logout").click( function (){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/logout.php',
+            data: { },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = "index.html";
+                }
+                else
+                {
+                    alert('GRESKA');
+                }
+            },
+        });
+    });
+</script>
+</html>

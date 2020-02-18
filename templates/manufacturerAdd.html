@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="../style/admin.css">
+    <meta charset="UTF-8">
+    <title>Add Manufaturer</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div class="admin">
+    Unesite proizvodjaca: <input type="text" name="name" id="name"><br>
+
+    <button id="save">Sacuvaj!</button>
+
+    <br><br>
+
+    <a href='adminDashboard.html'>Admin Dashboard!</a>
+</div>
+
+</body>
+
+<script>
+
+    var ime;
+    $( "#save" ).click(function() {
+        var ime = $("#name").val();
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/manufacturerAdd.php',
+            data: {name: ime},
+            dataType: 'json',
+            success: function(data) {
+                if (data.status) {
+                    alert("Uspjesno ste unijeli proizvodjaca!!!");
+                }
+                else {
+                    alert("Ime vec postoji")
+                }
+            },
+        });
+    })
+</script>
+</html>

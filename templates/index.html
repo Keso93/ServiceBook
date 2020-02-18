@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../style/glavna.css">
+    <title>Pocetna</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="header-top" style="vertical-align: auto">
+    <div id="no" hidden class="logged" style="padding: 5px">
+        <div class="holder">
+            <div class="logo">
+                <b><p class="knjiga">SERVISNA KNJIGA</p></b>
+            </div>
+            <div style="float: right; color: #fff">
+                Korisnicko ime: <input type="text" name="username" id="username">
+                Sifra: <input type="password" name="password" id="password">
+                <button id="login" class="bttn2">Log In!</button>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div id="yes" hidden class="logged" style="padding: 5px">
+        <div class="holder">
+            <div class="logo">
+                <b><p class="knjiga">SERVISNA KNJIGA</p></b>
+            </div>
+            <div style="float: right"><p id="ime" style="display: inline-block">Welcome </p>
+                <button id="logout" class="bttn2">Log Out!</button>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div style="clear: both">
+    </div>
+</div>
+<div id="vrh" class="header-bottom">
+    <div class="wrapper">
+
+            <!--<hr style="border-bottom: 2px solid #0b3e91;">-->
+            <!--<div id="logo"><b><p style="font-size: 25px; color: #0b3e91">SERVISNA KNJIGA</p></b></div>-->
+            <div id="nav" style="margin: 0 auto">
+                <ul>
+                    <li><a href="index.html">Pocetna</a></li>
+                    <li><a href="profile.html" id="profil">Moj Profil</a></li>
+                    <li><a href="kako-funkcionise.html">Kako funkcionise?</a></li>
+                    <li><a href="services.html">Autoservisi</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="hero">
+    <div class="wrapper">
+        <div class="register">
+            <h2 style="color: #fff">Nemate servisnu knjigu?</h2>
+            <p style="font-size: 16px">Mozete je besplatno otvoriti</p>
+            <p><a href="signup.html" class="bttn" style="color: #fff">Registruj se!!!</a></p>
+        </div>
+        <div class="find" style="background: rgba(255, 255, 255, 0.6); color: #0b3e91; padding: 10px; border-radius: 15px;
+            border-bottom: 4px solid #13619f">
+            <p style="font-size: 24px">Pretraga vozila po registraciji</p>
+            <div style="background-image: url(../Images/reg-tablice.jpg);
+            background-repeat: no-repeat; width: 250px; height: 80px; margin: 0 auto">
+                <input type="text" name="tablice" id="tablice" class="vozilo-lookup-reg-oznaka-input" style="position: relative;
+                left: 15px; top: 10px; width: 205px; height: 50px; text-transform: uppercase; text-align:center;
+                 border-style: none; font-size: 36px; font-weight: 600; font-family: Arial Narrow,Arial,sans-serif;" maxlength="10">
+            </div>
+            <button id="trazi" class="bttn2">Trazi</button>
+        </div>
+    </div>
+</div>
+
+<!--<div style="background: rgb(232, 218, 218);">-->
+    <!--<div class="wrapper">-->
+        <!--<div class="main">-->
+
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+
+<div>
+    <div class="ist">
+        <h2 style="margin-top: 0">Istorija servisiranja Vaseg vozila, dostupna uvek kada zatreba.</h2>
+    </div>
+    <div class="funkc">
+        <a href="kako-funkcionise.html"><p style="color: #fff">Kako funkcionise Servisna Knjiga?</p></a>
+    </div>
+
+</div>
+
+<hr style="border-bottom: 2px solid #0b3e91; margin-top: 5px">
+
+<div id="footer">
+
+    <p class="rights">All rigths reserved &copy; 2019 Marko</p>
+
+</div>
+
+</body>
+
+<script>
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(!data.status)
+                {
+                    // $("#first").append('<div style="width: 860px; margin: 0 auto; padding-top: 15px">' +
+                    //     '<div style="float: right">Korisnicko ime: <input type="text" name="username" id="username"> Sifra: ' +
+                    //     '<input type="password" name="password" id="password"> <button id="login">Log In!</button>' +
+                    //     '</div><div style="clear: both"></div></div><hr style="border-bottom: 2px solid #0b3e91;">')
+
+                    $("#no").show();
+                    // window.onscroll = function() {myFunction()};
+                    //
+                    // // Get the navbar
+                    // var header = document.getElementById("vrh");
+                    // console.log(header);
+                    //
+                    // // Get the offset position of the navbar
+                    // var sticky = header.offsetTop;
+                    // console.log(sticky);
+                    // var rect = header.getBoundingClientRect();
+                    // console.log(rect.top, rect.right, rect.bottom, rect.left);
+                    //
+                    // // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+                    // function myFunction() {
+                    //     if (window.pageYOffset >= sticky) {
+                    //         header.classList.add("sticky")
+                    //     } else {
+                    //         header.classList.remove("sticky");
+                    //     }
+                    //}
+                } else {
+                    // $("#first").append('<div style="width: 860px; margin: 0 auto; padding-top: 15px">' +
+                    //     '<div style="float: right">Welcome ' + data.name + ' <button id="logout">Log Out!</button>' +
+                    //     '</div><div style="clear: both"></div></div>' +
+                    //     '<hr style="border-bottom: 2px solid #0b3e91;">');
+                    $("#yes").show();
+                    $("#ime").append(data.name);
+                    // window.onscroll = function() {myFunction()};
+                    //
+                    // // Get the navbar
+                    // var header = document.getElementById("vrh");
+                    // console.log(header);
+                    //
+                    // // Get the offset position of the navbar
+                    // var sticky = header.offsetTop;
+                    // console.log(sticky);
+                    //
+                    // // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+                    // function myFunction() {
+                    //     if (window.pageYOffset >= sticky) {
+                    //         header.classList.add("sticky")
+                    //     } else {
+                    //         header.classList.remove("sticky");
+                    //     }
+                    // }
+                    window.history.pushState(null, null, "?id=" + data.id);
+                }
+            },
+        });
+    });
+
+    $("#logout").click(function (){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/logout.php',
+            data: { },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = "index.html";
+                }
+                else
+                {
+                    alert('GRESKA');
+                }
+            },
+        });
+    });
+
+    var ime;
+    var sifra;
+    console.log(ime);
+    $("#login").click( function () {
+        var ime = $("#username").val();
+        var sifra = $("#password").val();
+        console.log(ime);
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/login.php',
+            data: {username: ime, password: sifra},
+            dataType: 'json',
+            success: function(data) {
+                if (data.status) {
+                    window.location.href = "index.html";
+                } else {
+                    $('#username').attr("placeholder", "Pogresan username ili sifra").css('border', 'solid 1px red').css('box-shadow', '0 0 8px 0 red');
+                    $('#password').attr("placeholder", "Pogresan username ili sifra").css('border', 'solid 1px red').css('box-shadow', '0 0 8px 0 red');
+                }
+            },
+        });
+    });
+
+    // window.onscroll = function() {myFunction()};
+    //
+    // // Get the navbar
+    // var header = document.getElementById("vrh");
+    // console.log(header);
+    //
+    // // Get the offset position of the navbar
+    // var sticky = header.offsetTop;
+    // console.log(sticky);
+    // var rect = header.getBoundingClientRect();
+    // console.log(rect.top, rect.right, rect.bottom, rect.left);
+    //
+    // // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    // function myFunction() {
+    //     if (window.pageYOffset >= 47) {
+    //         header.classList.add("sticky")
+    //     } else {
+    //         header.classList.remove("sticky");
+    //     }
+    // }
+
+    var registration;
+    console.log(registration);
+    $("#trazi").click( function () {
+        var registration = $("#tablice").val();
+        console.log(registration);
+        window.location.href = "searchResults.html?registration=" + registration;
+    });
+</script>
+</html>

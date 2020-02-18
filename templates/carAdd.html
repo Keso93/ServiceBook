@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="../style/glavna.css">
+    <meta charset="UTF-8">
+    <title>Add Car</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/select2.css">
+    <script src="../js/select2.full.js"></script>
+</head>
+<body>
+
+
+<div id="first"></div>
+
+<div class="header-top" style="border-bottom: 2px solid #0b3e91">
+    <div id="yes" hidden class="logged" style="padding: 5px">
+        <div class="holder">
+            <div class="logo">
+                <b><p class="knjiga">SERVISNA KNJIGA</p></b>
+            </div>
+            <div style="float: right"><p id="ime1" style="display: inline-block">Welcome </p>
+                <button id="logout" class="bttn2">Log Out!</button>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div style="clear: both">
+    </div>
+    <div id="vrh" class="header-bottom">
+        <div class="wrapper">
+
+            <!--<hr style="border-bottom: 2px solid #0b3e91;">-->
+            <!--<div id="logo"><b><p style="font-size: 25px; color: #0b3e91">SERVISNA KNJIGA</p></b></div>-->
+            <div id="nav" style="margin: 0 auto">
+                <ul>
+                    <li><a href="index.html">Pocetna</a></li>
+                    <li><a href="profile.html" id="profil">Moj Profil</a></li>
+                    <li><a href="kako-funkcionise.html">Kako funkcionise?</a></li>
+                    <li><a href="services.html">Autoservisi</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="car">
+
+    <table style="margin: 0 auto">
+        <tr>
+            <td>Odaberite proizvodjaca: </td>
+            <td><select name="manufacturer" id="manufacturer" class="select-manufactor">
+                <option id="pro" value="0">Odabetite proizvodjaca</option></select><br></td>
+        </tr>
+        <tr>
+            <td>Odaberite model: </td>
+            <td><select name="model" id="model" class="select-model">
+                <option id="mo" value="0">Odaberite model</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td>Unesite broj sasije: </td>
+            <td><input type="text" name="broj_sasije" id="broj_sasije"></td>
+        </tr>
+        <tr>
+            <td>Unesite registarske oznake: </td>
+            <td><input type="text" name="registarska_oznaks" id="registarska_oznaka"></td>
+        </tr>
+        <tr>
+            <td>Unesite snagu motora(kWh): </td>
+            <td><input type="text" name="snaga_motora" id="snaga_motora"></td>
+        </tr>
+        <tr>
+            <td>Unesite kubikazu(m<sup>3</sup>): </td>
+            <td><input type="text" name="kubikaza" id="kubikaza"></td>
+        </tr>
+        <tr>
+            <td>Unesite godinu proizvodnje: </td>
+            <td><input type="text" name="godina_proizvodnje" id="godina_proizvodnje"></td>
+        </tr>
+        <tr>
+            <td>Odaberite privatnost:</td>
+            <td><select name="private" id="private" style="padding: 5px; border-radius: 5px">
+                <option value="0">Privatno</option>
+                <option value="1">Javno</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center"><button id="save" class="bttn2">Sacuvaj!</button></td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 350px"></div>
+
+
+    <!--Odaberite proizvodjaca: <select name="manufacturer" id="manufacturer">-->
+    <!--<option value="0"></option></select><br>-->
+    <!--Odaberite model:<br> <select name="model" id="model">-->
+    <!--<option value="0"></option></select><br>-->
+    <!--Unesite broj sasije: <input type="text" name="broj_sasije" id="broj_sasije"><br>-->
+    <!--Unesite registarske oznake: <input type="text" name="registarska_oznaks" id="registarska_oznaka"><br>-->
+    <!--Unesite snagu motora: <input type="text" name="snaga_motora" id="snaga_motora"><br>-->
+    <!--Unesite kubikazu: <input type="text" name="kubikaza" id="kubikaza"><br>-->
+    <!--Unesite godinu proizvodnje: <input type="text" name="godina_proizvodnje" id="godina_proizvodnje"><br>-->
+    <!--Unesite vlasnika: <input type="text" name="vlasnik_id" id="vlasnik_id"><br>-->
+
+    <!--<button id="save">Sacuvaj!</button>-->
+</div>
+
+<hr style="border-bottom: 2px solid #0b3e91; margin-top: 5px">
+
+
+<div id="footer">
+
+    <p class="rights">All rigths reserved &copy; 2019 Marko</p>
+
+</div>
+
+
+</body>
+
+<script>
+
+
+    // var url = $(location).attr('href');
+    // parts = url.split("=");
+    // console.log(parts);
+    // last_part = parts[parts.length-1];
+    // console.log(last_part);
+    var last_part;
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/showManufacturers.php',
+            data: {},
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function() {
+                    $("#manufacturer").append('<option value="' + this.id + '">' + this.name + '</option>')
+                })
+            },
+        });
+    });
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/showModels.php',
+            data: {},
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function() {
+                    $("#model").append('<option value="' + this.id + '">' + this.name + '</option>')
+                })
+            },
+        });
+    });
+
+    var ime;
+    $( "#save" ).click(function() {
+        var model = $("#model").val();
+        var proizvodjac = $("#manufacturer").val();
+        var brojSasije = $("#broj_sasije").val();
+        var registarskaOznaka = $("#registarska_oznaka").val();
+        var snagaMotora = $("#snaga_motora").val()*1;
+        var kubikaza = $("#kubikaza").val()*1;
+        var godinaProizvodnje = $("#godina_proizvodnje").val()*1;
+        var vlasnik = last_part;
+        var private = $("#private").val();
+        console.log(Number.isInteger(godinaProizvodnje));
+
+        if (model != "" && proizvodjac != "" && brojSasije != "" && registarskaOznaka != "" && snagaMotora != "" &&
+            kubikaza != "" && godinaProizvodnje != "") {
+            if (brojSasije.length == 17) {
+                if (registarskaOznaka.length >= 5 && registarskaOznaka.length <=7) {
+                    if (Number.isInteger(snagaMotora) && snagaMotora >= 30 && snagaMotora <= 250) {
+                        if (Number.isInteger(kubikaza) && kubikaza >= 1000 && kubikaza <= 6000) {
+                            if (Number.isInteger(godinaProizvodnje) && godinaProizvodnje >= 1970 && godinaProizvodnje <=2019) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: 'http://localhost/ServisnaKnjiga/public/carAdd.php',
+                                    data: {
+                                        model_id: model,
+                                        manufactor_id: proizvodjac,
+                                        broj_sasije: brojSasije,
+                                        registarska_oznaka: registarskaOznaka,
+                                        snaga_motora: snagaMotora,
+                                        kubikaza: kubikaza,
+                                        godina_proizvodnje: godinaProizvodnje,
+                                        vlasnik_id: vlasnik,
+                                        privacy : private
+                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        if (data.status) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: 'http://localhost/ServisnaKnjiga/public/createServiceBook.php',
+                                                data: {car_id: data.id},
+                                                dataType: 'json',
+                                                success: function (data) {
+                                                    if (!data.status) {
+                                                        alert(data.message);
+                                                    } else {
+                                                        alert("Uspjesno ste dodali vozilo!")
+                                                    }
+                                                },
+                                            });
+                                            window.location.href = "profile.html";
+                                        } else {
+                                            alert(data.status)
+                                        }
+                                    },
+                                });
+                            } else {
+                                $("#kubikaza").css('border', '').css('box-shadow', '');
+                                $("#snaga_motora").css('border', '').css('box-shadow', '');
+                                $("#registarska_oznaka").css('border', '').css('box-shadow', '');
+                                $("#broj_sasije").css('border', '').css('box-shadow', '');
+                                $("#godina_proizvodnje").val("");
+                                $("#godina_proizvodnje").attr("placeholder", "greska").css('border', 'solid 1px red')
+                                    .css('box-shadow', '0 0 8px 0 red');
+                            }
+                        } else {
+                            $("#registarska_oznaka").css('border', '').css('box-shadow', '');
+                            $("#broj_sasije").css('border', '').css('box-shadow', '');
+                            $("#snaga_motora").css('border', '').css('box-shadow', '');
+                            $("#kubikaza").val("");
+                            $("#kubikaza").attr("placeholder", "greska").css('border', 'solid 1px red')
+                                .css('box-shadow', '0 0 8px 0 red');
+                        }
+                    } else {
+                        $("#broj_sasije").css('border', '').css('box-shadow', '');
+                        $("#registarska_oznaka").css('border', '').css('box-shadow', '');
+                        $("#snaga_motora").val("");
+                        $("#snaga_motora").attr("placeholder", "greska").css('border', 'solid 1px red')
+                            .css('box-shadow', '0 0 8px 0 red');
+                    }
+                } else {
+                    $("#broj_sasije").css('border', '').css('box-shadow', '');
+                    $("#registarska_oznaka").val("");
+                    $("#registarska_oznaka").attr("placeholder", "Pogresne tablice").css('border', 'solid 1px red').css('box-shadow', '0 0 8px 0 red');
+                }
+            } else {
+                $("#broj_sasije").val("");
+                $("#broj_sasije").attr("placeholder", "Pogresan broj sasije").css('border', 'solid 1px red').css('box-shadow', '0 0 8px 0 red');
+
+            }
+        } else {
+            $("#mo").css('border', 'solid 1px red').css('box-shadow', '0 0 8px 0 red');
+            $("#pro").attr("value", "Polje nije popunjeno");
+            $("#broj_sasije").attr("placeholder", "Polje nije popunjeno");
+            $("#registarska_oznaka").attr("placeholder", "Polje nije popunjeno");
+            $("#kubikaza").attr("placeholder", "Polje nije popunjeno");
+            $("#snaga_motora").attr("placeholder", "Polje nije popunjeno");
+            $("#godina_proizvodnje").attr("placeholder", "Polje nije popunjeno");
+        }
+    });
+
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    // $("#first").append('<div style="width: 860px; margin: 0 auto; padding-top: 15px">' +
+                    //     '<div style="float: right">Welcome ' + data.name + ' <button id="logout">Log Out!</button>' +
+                    //     '</div><div style="clear: both"></div></div>' +
+                    //     '<hr style="border-bottom: 2px solid #0b3e91;">');
+                    // window.history.pushState(null, null, "?id=" + data.id);
+                    $("#yes").show();
+                    $("#ime1").append(data.name);
+
+                    window.history.pushState(null, null, "?id=" + data.id);
+
+                }
+            },
+        });
+    });
+
+    $("#logout").click( function (){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/logout.php',
+            data: { },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = "index.html";
+                }
+                else
+                {
+                    alert('GRESKA');
+                }
+            },
+        });
+    });
+
+    $(document).ready(function() {
+        $('.select-manufactor').select2().on('select2:select', function (e) {
+            var data = e.params.data;
+            $("#manufacturer option[value='0']").remove();
+
+
+            $.ajax({
+                    type: "POST",
+                    url: 'http://localhost/ServisnaKnjiga/public/showModelByManufactor.php',
+                    data: {manufactor_id: data.id},
+                    dataType: 'json',
+                    success: function(data) {
+                        $("#model").children().remove().end();
+                        $.each(data, function() {
+                            $("#model").append('<option value="' + this.id + '">' + this.name + '</option>')
+                        })
+                    },
+                });
+
+        });
+    });
+
+    $(document).ready(function() {
+        $('.select-model').select2().on('select2:select', function (e) {
+            var data = e.params.data;
+        })
+    });
+</script>
+
+</html>

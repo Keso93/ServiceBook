@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="../style/admin.css">
+    <meta charset="UTF-8">
+    <title>Add Model</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div  class="admin">
+    Odaberite proizvodjaca: <select name="manufacturer" id="manufacurer"></select><br>
+    Unesite model: <input type="text" name="name" id="name"><br>
+
+    <button id="save">Sacuvaj!</button>
+
+    <br><br>
+
+    <a href='adminDashboard.html'>Admin Dashboard!</a>
+
+</div>
+
+
+</body>
+
+<script>
+
+
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkAdminSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(!data.status)
+                {
+                    window.location.href = 'adminLogin.html';
+                }
+            },
+        });
+    });
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/showManufacturers.php',
+            data: {},
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function() {
+                    $("#manufacurer").append('<option value="' + this.id + '">' + this.name + '</option>')
+                })
+            },
+        });
+    });
+
+    var ime;
+    $( "#save" ).click(function() {
+        var ime = $("#name").val();
+        var proizvodjac = $("#manufacurer").val();
+        console.log(proizvodjac);
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/modelAdd.php',
+            data: {name: ime, manufactor_id: proizvodjac},
+            dataType: 'json',
+            success: function(data) {
+                if (data.status) {
+                    alert("Uspjesno ste unijeli model!!!");
+                }
+                else {
+                    alert(data.status)
+                }
+            },
+        });
+    })
+</script>
+</html>

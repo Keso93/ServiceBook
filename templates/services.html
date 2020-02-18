@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Services</title>
+    <link rel="stylesheet" type="text/css" href="../style/glavna.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div class="header-top" style="border-bottom: 2px solid #0b3e91">
+    <div id="yes" hidden class="logged" style="padding: 5px">
+        <div class="holder">
+            <div class="logo">
+                <b><p class="knjiga">SERVISNA KNJIGA</p></b>
+            </div>
+            <div style="float: right"><p id="ime1" style="display: inline-block">Welcome </p>
+                <button id="logout" class="bttn2">Log Out!</button>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div style="clear: both">
+    </div>
+    <div id="vrh" class="header-bottom">
+        <div class="wrapper">
+
+            <!--<hr style="border-bottom: 2px solid #0b3e91;">-->
+            <!--<div id="logo"><b><p style="font-size: 25px; color: #0b3e91">SERVISNA KNJIGA</p></b></div>-->
+            <div id="nav" style="margin: 0 auto">
+                <ul>
+                    <li><a href="index.html">Pocetna</a></li>
+                    <li><a href="profile.html" id="profil">Moj Profil</a></li>
+                    <li><a href="kako-funkcionise.html">Kako funkcionise?</a></li>
+                    <li><a href="services.html">Autoservisi</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="background: url(../Images/parallax-transparent.jpg)">
+
+    <h2 style="text-align: center; color: #13619f; padding-top: 20px; margin: 0">Autoservisi:</h2>
+    <div class="wrapper" style="padding: 10px;">
+        <div  id="service">
+
+        </div>
+
+    </div>
+</div>
+
+<hr style="border-bottom: 2px solid #0b3e91; margin-top: 5px">
+
+<div id="footer">
+
+    <p class="rights">All rigths reserved &copy; 2019 Marko</p>
+
+</div>
+
+
+</body>
+
+<script>
+
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    // $("#first").append('<div style="width: 860px; margin: 0 auto; padding-top: 15px">' +
+                    //     '<div style="float: right">Welcome ' + data.name + ' <button id="logout">Log Out!</button>' +
+                    //     '</div><div style="clear: both"></div></div>' +
+                    //     '<hr style="border-bottom: 2px solid #0b3e91;">');
+                    // window.history.pushState(null, null, "?id=" + data.id);
+                    $("#yes").show();
+                    $("#ime1").append(data.name);
+
+                    window.history.pushState(null, null, "?id=" + data.id);
+
+                }
+            },
+        });
+    });
+
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/showServices.php',
+            data: {},
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function() {
+                //     $("#service").append('<tr style="border-radius: 15px; border-top: 3px solid #13619f; background: rgba(255, 255, 255, 0.6)">' +
+                //         '<td style="padding-right: 100px;">' +
+                //         '<img src="../Images/avatar.jpg" alt="avatar" style="margin: 10px 0">' +
+                //         '</td><td><p style="font-size: 24px">Autoservis: ' + this.name + '</p><br><p style="font-size: 14px">' +
+                //         'Adresa: ' + this.address + '</p></td></tr>')
+
+
+                    $("#service").append('<div data-aos="zoom-in-up" class="service" )>' +
+                        '<img src="../Images/avatar.jpg" alt="avatar" style="margin: 15px 0"><div style="vertical-align: auto; margin: auto">' +
+                        '<p class="fa">Autoservis: ' +
+                        this.name + '</p><br><p class="fad">Adresa: ' + this.address + '</p></div></div>')
+                })
+            },
+        });
+    });
+
+    $("#logout").click( function (){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/logout.php',
+            data: { },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = "index.html";
+                }
+                else
+                {
+                    alert('GRESKA');
+                }
+            },
+        });
+    });
+
+</script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+</html>

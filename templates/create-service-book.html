@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="../style/glavna.css">
+    <meta charset="UTF-8">
+    <title>Add Car</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div id="header" style="border-bottom: 2px solid #0b3e91">
+    <div style="width: 860px; margin: 0 auto; padding-top: 15px" id="yes" hidden>
+        <div style="float: right"><p id="ime" style="display: inline-block">Wellcome </p>
+            <button id="logout">Log Out!</button>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <div style="clear: both">
+    </div>
+    <div class="wrapper">
+        <div id="logo"><b><p style="font-size: 25px; color: #0b3e91">SERVISNA KNJIGA</p></b></div>
+        <div id="nav">
+            <ul>
+                <li><a href="index.html">Pocetna</a></li>
+                <li><a href="#">Moj Profil</a></li>
+                <li><a href="kako-funkcionise.html">Kako funkcionise?</a></li>
+                <li><a href="services.html">Autoservisi</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div style="width: 860px; margin: 0 auto; padding: 25px">
+
+    <table style="margin: 0 auto">
+        <tr>
+            <td>Odaberite auto: </td>
+            <td>
+                <select name="car_id" id="car-id"></select>
+            </td>
+
+        <tr>
+            <td colspan="2"><button id="save">Sacuvaj!</button></td>
+        </tr>
+    </table>
+
+
+</div>
+
+<hr style="border-bottom: 2px solid #0b3e91; margin-top: 5px">
+
+
+<div id="footer">
+
+    <p style="text-align: center; font-size: 18px">All rigths reserved &copy; 2019 Marko</p>
+
+</div>
+
+
+</body>
+
+<script>
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/showCars.php',
+            data: {},
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function() {
+                    $("#car-id").append('<option value="' + this.id + '">' + this.name + '</option>')
+                })
+            },
+        });
+    });
+
+
+    var ime;
+    $( "#save" ).click(function() {
+        var carId = $("#car-id").val();
+        console.log(carId);
+;
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/createServiceBook.php',
+            data: {car_id: carId},
+            dataType: 'json',
+            success: function(data) {
+                if (data.status) {
+                    alert("Uspjesno ste otvorili servisnu knjigu!!!");
+                }
+                else {
+                    alert(data.status)
+                }
+            },
+        });
+    });
+
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(!data.status)
+                {
+                    window.location.href = 'login.html';
+                }
+            },
+        });
+    });
+</script>
+
+</html>

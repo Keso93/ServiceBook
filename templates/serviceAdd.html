@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="../style/admin.css">
+    <meta charset="UTF-8">
+    <title>Add Service</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div  class="admin">
+
+    Unesite servis: <input type="text" name="name" id="name"><br>
+    Unesite adresu: <input type="text" name="address" id="address"><br>
+
+    <button id="save">Sacuvaj!</button>
+
+    <br><br>
+
+    <a href='index.html'>Pocetna!</a><br>
+    <a href='adminDashboard.html'>Admin Dashboard!</a>
+
+</div>
+
+</body>
+
+<script>
+
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkAdminSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(!data.status)
+                {
+                    window.location.href = 'adminLogin.html';
+                }
+            },
+        });
+    });
+
+    $( "#save" ).click(function() {
+        var ime = $("#name").val();
+        var adresa = $("#address").val();
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/serviceAdd.php',
+            data: {name: ime, address: adresa},
+            dataType: 'json',
+            success: function(data) {
+                if (data.status) {
+                    alert("Uspjesno ste unijeli servis!!!");
+                }
+                else {
+                    alert(data.status)
+                }
+            },
+        });
+    })
+</script>
+</html>

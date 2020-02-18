@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+
+.admin {
+    width: 200px;
+    background: silver;
+    text-align: center;
+    margin: 50px auto;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+a {
+    text-decoration: none;
+}
+table {
+    background: #fff;
+}
+table, th, td {
+    border: 1px solid #000;
+    text-align: center;
+}

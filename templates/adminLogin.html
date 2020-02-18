@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <link rel="stylesheet" type="text/css" href="../style/admin.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div class="admin">
+    Admin: <input type="text" name="name" id="name"><br>
+    Sifra: <input type="password" name="password" id="password"><br>
+
+    <button id="loginAdmin">Log In!</button>
+</div>
+
+</body>
+
+<script>
+
+    var ime;
+    var sifra;
+    $( "#loginAdmin" ).click(function() {
+        var ime = $("#name").val();
+        var sifra = $("#password").val();
+        console.log(ime);
+        console.log(sifra);
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/adminLogin.php',
+            data: {name: ime, password: sifra},
+            dataType: 'json',
+            success: function(data) {
+                if (data.status) {
+                    window.location.href = 'adminDashboard.html?id=' + data.id;
+                }
+            },
+        });
+    })
+</script>
+
+
+</body>
+</html>

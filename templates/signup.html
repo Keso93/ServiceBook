@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../style/admin.css">
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" type="text/css" href="../style/glavna.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="header-top" style="border-bottom: 2px solid #0b3e91">
+    <div id="yes" hidden class="logged" style="padding: 5px">
+        <div class="holder">
+            <div class="logo">
+                <b><p class="knjiga">SERVISNA KNJIGA</p></b>
+            </div>
+            <div style="float: right"><p id="ime1" style="display: inline-block">Welcome </p>
+                <button id="logout" class="bttn2">Log Out!</button>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div style="clear: both">
+    </div>
+    <div id="vrh" class="header-bottom">
+        <div class="wrapper">
+
+            <!--<hr style="border-bottom: 2px solid #0b3e91;">-->
+            <!--<div id="logo"><b><p style="font-size: 25px; color: #0b3e91">SERVISNA KNJIGA</p></b></div>-->
+            <div id="nav" style="margin: 0 auto">
+                <ul>
+                    <li><a href="index.html">Pocetna</a></li>
+                    <li><a href="profile.html" id="profil">Moj Profil</a></li>
+                    <li><a href="kako-funkcionise.html">Kako funkcionise?</a></li>
+                    <li><a href="services.html">Autoservisi</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="background: url(../Images/parallax-transparent.jpg)">
+    <div class="wrapper" >
+        <div class="signup">
+
+            <h2>Registruj se:</h2>
+
+            <table class="regtab">
+                <tr style="border: none">
+                    <td style="border: none;">Unesite korisnicko ime:</td>
+                    <td style="border: none"><input type="text" name="username" id="username" required></td>
+                </tr>
+                <tr style="border: none">
+                    <td style="border: none">Unesite sifru:</td>
+                    <td style="border: none"><input type="password" name="password" id="password" required></td>
+                </tr>
+                <tr style="border: none">
+                    <td style="border: none">Ponovite sifru:</td>
+                    <td style="border: none"><input type="password" id="kontrola" required></td>
+                </tr>
+                <tr style="border: none">
+                    <td style="border: none">Unesite email:</td>
+                    <td style="border: none"><input type="email" name="email" id="email" required></td>
+                </tr>
+                <tr style="border: none">
+                    <td colspan="2" style="border: none"><button id="signup" class="bttn2">Sign Up!</button></td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<hr style="border-bottom: 2px solid #0b3e91; margin-top: 5px">
+
+<div id="footer">
+
+    <p class="rights">All rigths reserved &copy; 2019 Marko</p>
+
+</div>
+
+</body>
+
+<script>
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: { },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = 'profile.html';
+                }
+            },
+        });
+    });
+
+    var ime;
+    var sifra;
+    var email;
+    console.log(ime);
+    $( "#signup" ).click(function() {
+        var ime = $("#username").val();
+        var sifra = $("#password").val();
+        var kontrola = $("#kontrola").val();
+        var email = $("#email").val();
+        console.log(ime);
+        if (ime != "" && sifra != "" && email != "" && kontrola != "") {
+            if (sifra === kontrola) {
+                $.ajax({
+                    type: "POST",
+                    url: 'http://localhost/ServisnaKnjiga/public/signup.php',
+                    data: {username: ime, password: sifra, email: email},
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.status) {
+                            $.ajax({
+                                type: "POST",
+                                url: 'http://localhost/ServisnaKnjiga/public/login.php',
+                                data: {username: ime, password: sifra},
+                                dataType: 'json',
+                                success: function(data) {
+                                    if (data.status) {
+                                        window.location.href = "index.html";
+                                    }
+                                },
+                            });                        } else {
+                            $("#username").val("");
+                            $("#username").attr("placeholder", "username je zauzet");
+                        }
+                    },
+                });
+            } else {
+                $("#password").val("");
+                $("#password").attr("placeholder", "Sifre nisu iste");
+                $("#kontrola").val("");
+                $("#kontrola").attr("placeholder", "Sifre nisu iste");
+            }
+        } else {
+            $("#username").attr("placeholder", "Polje nije popunjeno");
+            $("#password").attr("placeholder", "Polje nije popunjeno");
+            $("#kontrola").attr("placeholder", "Polje nije popunjeno");
+            $("#email").attr("placeholder", "Polje nije popunjeno");
+
+        }
+    })
+</script>
+</html>

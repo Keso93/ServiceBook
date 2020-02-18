@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../style/admin.css">
+    <meta charset="UTF-8">
+    <title>Log In</title>
+    <link rel="stylesheet" type="text/css" href="../style/admin.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<div class="admin">
+    Unesite korisnicko ime: <input type="text" name="username" id="username"><br>
+    Unesite sifru: <input type="password" name="password" id="password"><br>
+
+    <button id="login">Log In!</button>
+</div>
+
+</body>
+
+<script>
+
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = 'index.html';
+                }
+            },
+        });
+    });
+
+    var ime;
+    var sifra;
+    console.log(ime);
+    $( "#login" ).click(function() {
+        var ime = $("#username").val();
+        var sifra = $("#password").val();
+        console.log(ime);
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/login.php',
+            data: {username: ime, password: sifra},
+            dataType: 'json',
+            success: function(data) {
+                if (data.status) {
+                    window.location.href = "index.html?id=" + data.id + "&name=" + data.username;
+                }
+            },
+        });
+    })
+</script>
+</html>

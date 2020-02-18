@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../style/glavna.css">
+    <title>Profil</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+
+<div class="header-top" style="border-bottom: 2px solid #0b3e91">
+    <div id="yes" hidden class="logged" style="padding: 5px">
+        <div class="holder">
+            <div class="logo">
+                <b><p class="knjiga">SERVISNA KNJIGA</p></b>
+            </div>
+            <div style="float: right"><p id="ime1" style="display: inline-block">Welcome </p>
+                <button id="logout" class="bttn2">Log Out!</button>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div style="clear: both">
+    </div>
+    <div id="vrh" class="header-bottom">
+        <div class="wrapper">
+
+            <!--<hr style="border-bottom: 2px solid #0b3e91;">-->
+            <!--<div id="logo"><b><p style="font-size: 25px; color: #0b3e91">SERVISNA KNJIGA</p></b></div>-->
+            <div id="nav" style="margin: 0 auto">
+                <ul>
+                    <li><a href="index.html">Pocetna</a></li>
+                    <li><a href="profile.html" id="profil">Moj Profil</a></li>
+                    <li><a href="kako-funkcionise.html">Kako funkcionise?</a></li>
+                    <li><a href="services.html">Autoservisi</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div style=" background: url(../Images/parallax-transparent.jpg)" id="all">
+    <div class="profile">
+        <div style="float: left; margin-top: 5px"><img src="../Images/avatar.jpg" alt="profilna"></div>
+        <div class="profile1" id="k">
+            <p id="ime">Korisnicko ime: </p>
+            <p id="email">Email: </p>
+            <p >Moja auta: </p>
+            <ul id="auto">
+
+            </ul>
+            <a href="carAdd.html">Dodaj auto</a>
+        </div>
+        <div style="clear:both;"></div>
+        <button class="bttn2" id="edit">Izmijeni profil!</button>
+        <div id="s" hidden><button id="save" class="bttn2">Sacuvaj promjene!</button></div>
+
+        <div style="margin-top: 400px"></div>
+    </div>
+
+
+</div>
+
+
+<hr style="border-bottom: 2px solid #0b3e91; margin-top: 5px">
+
+<div id="footer">
+
+    <p class="rights">All rigths reserved &copy; 2019 Marko</p>
+
+</div>
+
+</body>
+
+<script>
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+    var ime;
+    var email;
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+
+                    $("#yes").show();
+                    $("#ime1").append(data.name);
+                    window.history.pushState(null, null, "?id=" + data.id);
+                    var url = $(location).attr('href');
+                    parts = url.split("=");
+                    last_part = parts[parts.length-1];
+                    $.ajax({
+                        type: "POST",
+                        url: 'http://localhost/ServisnaKnjiga/public/showUserById.php',
+                        data: { id: last_part },
+                        dataType: 'json',
+                        success: function(data) {
+                            $.each(data, function()
+                            {
+                                $("#ime").append(this.username);
+                                $("#email").append(this.email);
+                                ime = this.username;
+                                email = this.email;
+
+                            })
+                        },
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: 'http://localhost/ServisnaKnjiga/public/showCarsByOwnerId.php',
+                        data: { id: last_part },
+                        dataType: 'json',
+                        success: function(data) {
+                            $.each(data, function()
+                            {
+                                $("#auto").append('<li value="' + this.id + '"><a href="car.html?id=' + last_part +'&car_id=' + this.id +'">'
+                                    + this.auto + '</a></li>')
+                            })
+                        },
+                    });
+
+                } else {
+                    window.location.href = 'index.html';
+                }
+            },
+        });
+    });
+
+
+    // $( document ).ready(function(){
+    //     $.ajax({
+    //         type: "POST",
+    //         url: 'http://localhost/ServisnaKnjiga/public/showUserById.php',
+    //         data: { id: last_part },
+    //         dataType: 'json',
+    //         success: function(data) {
+    //             $.each(data, function()
+    //             {
+    //                 $("#ime").append(this.username);
+    //                 $("#email").append(this.email);
+    //
+    //             })
+    //         },
+    //     });
+    // });
+
+
+    // $( document ).ready(function(){
+    //     $.ajax({
+    //         type: "POST",
+    //         url: 'http://localhost/ServisnaKnjiga/public/showCarsByOwnerId.php',
+    //         data: { id: last_part },
+    //         dataType: 'json',
+    //         success: function(data) {
+    //             $.each(data, function()
+    //             {
+    //                 $("#auto").append('<li value="' + this.id + '"><a href="car.html?id=' + last_part +'&car_id=' + this.id +'">'
+    //                     + this.auto + '</a></li>')
+    //             })
+    //         },
+    //     });
+    // });
+
+    $("#logout").click( function (){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/logout.php',
+            data: { },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = "index.html";
+                }
+                else
+                {
+                    alert('GRESKA');
+                }
+            },
+        });
+    });
+
+
+    console.log(ime);
+    $("#edit").click( function (){
+        $('#ime').html('<p>Korisnicko ime: <input type="text" id="ime_edited" value="' + ime + '"></p>');
+        $('#email').html('<p>Email: <input type="email" id="email_edited" value="' + email + '"></p>');
+        $('#edit').hide();
+        $('#s').show();
+    });
+
+    $("#all").on('click', '#save', function (){
+        ime = $('#ime_edited').val();
+        email = $('#email_edited').val();
+        console.log(ime);
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/editUser.php',
+            data: { id : last_part, username : ime, email : email },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = "profile.html";
+
+                    // $("#ime").append(data.username);
+                    // $("#email").append(data.email);
+                    // $('#edit').show();
+                    // $('#s').hide();
+                }
+                else
+                {
+                    alert('GRESKA');
+                }
+            },
+        });
+
+    });
+
+</script>
+</html>

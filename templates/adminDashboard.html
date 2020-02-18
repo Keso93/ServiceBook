@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../style/admin.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <style type="text/css">
+        a {
+            text-decoration: none;
+        }
+        table {
+            background: #ccc;
+            margin: 50px auto;
+        }
+        table, th, td {
+            border: 1px solid #000;
+            text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+
+    <table>
+        <th>Wellcome Admin</th>
+        <tr><td><a href='serviceAdd.html'>Dodajte servis!</a></td></tr>
+        <tr><td><a href='manufacturerAdd.html'>Dodajte proizvodjaca!</a></td></tr>
+        <tr><td><a href='modelAdd.html'>Dodajte model!</a></td></tr>
+        <tr><td><a href='showUsers.html'>Korisnici!</a></td></tr>
+        <tr><td><button id="logout">Log out</button></td></tr>
+        <!-- "U will be redirected to the main page in 2 seconds!!!"-->
+    </table>
+
+</body>
+
+<script>
+    var url = $(location).attr('href');
+    parts = url.split("=");
+    last_part = parts[parts.length-1];
+
+    $( document ).ready(function(){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/checkAdminSession.php',
+            data: { id: last_part },
+            dataType: 'json',
+            success: function(data) {
+                if(!data.status)
+                {
+                    window.location.href = 'adminLogin.html';
+                }
+            },
+        });
+    });
+
+    $("#logout").click(function (){
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost/ServisnaKnjiga/public/logout.php',
+            data: { },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status)
+                {
+                    window.location.href = "adminLogin.html";
+                }
+                else
+                {
+                    alert('GRESKA');
+                }
+            },
+        });
+    });
+</script>
+</html>
